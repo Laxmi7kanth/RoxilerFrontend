@@ -1,25 +1,111 @@
-import logo from './logo.svg';
+import {Component} from "react"
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends Component{
+  state={products:[],barData:[],desiredMonth:"3",offsetValue:0,searchInput:""}
+
+  componentDidMount(){
+    this.getProductsApi()
+  }
+
+  getProductsApi=async()=>{
+    const {desiredMonth,offsetValue,searchInput}=this.state
+    const response=await fetch(`https://vast-jade-mackerel-yoke.cyclic.app/?searchq=${searchInput}&month=${desiredMonth}&limit=10&offset=${offsetValue}`)
+    const response2=await fetch("https://vast-jade-mackerel-yoke.cyclic.app/bar-chart?month=06")
+    if(response.ok===true){
+      const data=await response.json()
+      this.setState({products:data})
+    }
+    else{
+      this.setState({products:[]})
+      console.log("something went wrong")
+    }
+    if(response2.ok===true){
+      const data2=await response2.json()
+      this.setState({barData:[data2.data]})
+    }
+    else{
+      this.setState({products:[]})
+      console.log("something went wrong")
+    }
+  }
+
+  onDropDownChange=(event)=>{
+    this.setState({desiredMonth:event.target.value},this.getProductsApi)
+  }
+
+  onNextClick=()=>{
+    this.setState((prevState)=>({offsetValue:prevState.offsetValue+10
+    }),this.getProductsApi)
+  }
+
+  onPreviousClick=()=>{
+    this.setState((prevState)=>({offsetValue:prevState.offsetValue-10}),this.getProductsApi)
+  }
+
+  onInputChange=(event)=>{
+    this.setState({searchInput:event.target.value},this.getProductsApi)
+  }
+
+  render(){
+    const{products,searchInput}=this.state
+    console.log(products)
+    return(
+      <div className="bg-container">
+        <h1 className="heading">Transaction Dashboard</h1>
+        <div className="dropdown">
+          <input value={searchInput} onChange={this.onInputChange} placeholder="Search"/>
+          <select onChange={this.onDropDownChange}>
+            <option value="1">Jan</option>
+            <option value="2">Feb</option>
+            <option value="3" selected>Mar</option>
+            <option value="4">Apr</option>
+            <option value="5">May</option>
+            <option value="6">Jun</option>
+            <option value="7">Jul</option>
+            <option value="8">Aug</option>
+            <option value="9">Sep</option>
+            <option value="10">Oct</option>
+            <option value="11">Nov</option>
+            <option value="12">Dec</option>
+          </select>
+        </div>
+        <table>
+          <thead>
+          <tr>
+            <th>id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Sold</th>
+            <th>Image</th>
+          </tr>
+          </thead>
+          <tbody>
+          {
+             products.map((eachItem)=>(
+              <tr>
+                <td>{eachItem.id}</td>
+                <td>{eachItem.title}</td>
+                <td>{eachItem.description}</td>
+                <td>{eachItem.price}</td>
+                <td>{eachItem.category}</td>
+                <td>{eachItem.Sold}</td>
+                <td><img src={eachItem.image} alt="product" className="product-image"/></td>
+              </tr>
+             ))
+          }
+          </tbody>
+        </table>
+        <div className="button-container">
+          <button type="button" onClick={this.onPreviousClick}>Previous</button>
+          <button type="button" onClick={this.onNextClick}>Next</button>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default App;
