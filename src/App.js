@@ -50,7 +50,7 @@ class App extends Component{
   }
 
   render(){
-    const{products,searchInput}=this.state
+    const{products,searchInput,barData}=this.state
     console.log(products)
     return(
       <div className="bg-container">
