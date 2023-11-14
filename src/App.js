@@ -24,7 +24,7 @@ class App extends Component{
     }
     if(response2.ok===true){
       const data2=await response2.json()
-      this.setState({barData:[data2.data]})
+      this.setState({barData:data2.data})
     }
     else{
       this.setState({products:[]})
@@ -106,7 +106,7 @@ class App extends Component{
         </div>
         <h1>Bar Chart</h1>
         <ResponsiveContainer width="50%" aspect={3}>
-          <BarChart data={barData} width={600} height={400}>
+          <BarChart data={barData} width={600} height={500}>
             <XAxis dataKey="name"/>
             <Tooltip/>
             <YAxis/>
