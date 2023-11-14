@@ -1,5 +1,6 @@
 import {Component} from "react"
 import './App.css';
+import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip} from "recharts"
 
 
 class App extends Component{
@@ -103,6 +104,15 @@ class App extends Component{
           <button type="button" onClick={this.onPreviousClick}>Previous</button>
           <button type="button" onClick={this.onNextClick}>Next</button>
         </div>
+        <h1>Bar Chart</h1>
+        <ResponsiveContainer width="50%" aspect={3}>
+          <BarChart data={barData} width={600} height={400}>
+            <XAxis dataKey="name"/>
+            <Tooltip/>
+            <YAxis/>
+            <Bar dataKey="no_of_items" fill="#1ac6ff"/>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     )
   }
