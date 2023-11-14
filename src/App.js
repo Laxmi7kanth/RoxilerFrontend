@@ -1,7 +1,7 @@
 import {Component} from "react"
 import './App.css';
 import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip} from "recharts"
- 
+
 
 class App extends Component{
   state={products:[],barData:[],desiredMonth:"3",offsetValue:0,searchInput:""}
@@ -24,7 +24,6 @@ class App extends Component{
     }
     if(response2.ok===true){
       const data2=await response2.json()
-      console.log(data2.data)
       this.setState({barData:data2.data})
     }
     else{
@@ -104,8 +103,9 @@ class App extends Component{
           <button type="button" onClick={this.onPreviousClick}>Previous</button>
           <button type="button" onClick={this.onNextClick}>Next</button>
         </div>
+        <h1>Bar Chart</h1>
         <ResponsiveContainer width="50%" aspect={3}>
-          <BarChart data={barData} width={600} height={400}>
+          <BarChart data={barData} width={600} height={500}>
             <XAxis dataKey="name"/>
             <Tooltip/>
             <YAxis/>
