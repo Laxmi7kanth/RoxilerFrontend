@@ -1,6 +1,7 @@
 import {Component} from "react"
 import './App.css';
-
+import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip} from "recharts"
+ 
 
 class App extends Component{
   state={products:[],barData:[],desiredMonth:"3",offsetValue:0,searchInput:""}
@@ -12,7 +13,7 @@ class App extends Component{
   getProductsApi=async()=>{
     const {desiredMonth,offsetValue,searchInput}=this.state
     const response=await fetch(`https://vast-jade-mackerel-yoke.cyclic.app/?searchq=${searchInput}&month=${desiredMonth}&limit=10&offset=${offsetValue}`)
-    const response2=await fetch("https://vast-jade-mackerel-yoke.cyclic.app/bar-chart?month=06")
+    const response2=await fetch(`https://vast-jade-mackerel-yoke.cyclic.app/bar-chart?month=${desiredMonth}`)
     if(response.ok===true){
       const data=await response.json()
       this.setState({products:data})
@@ -23,7 +24,8 @@ class App extends Component{
     }
     if(response2.ok===true){
       const data2=await response2.json()
-      this.setState({barData:[data2.data]})
+      console.log(data2.data)
+      this.setState({barData:data2.data})
     }
     else{
       this.setState({products:[]})
@@ -49,8 +51,7 @@ class App extends Component{
   }
 
   render(){
-    const{products,searchInput}=this.state
-    console.log(products)
+    const{products,searchInput,barData}=this.state
     return(
       <div className="bg-container">
         <h1 className="heading">Transaction Dashboard</h1>
@@ -103,6 +104,14 @@ class App extends Component{
           <button type="button" onClick={this.onPreviousClick}>Previous</button>
           <button type="button" onClick={this.onNextClick}>Next</button>
         </div>
+        <ResponsiveContainer width="50%" aspect={3}>
+          <BarChart data={barData} width={600} height={400}>
+            <XAxis dataKey="name"/>
+            <Tooltip/>
+            <YAxis/>
+            <Bar dataKey="no_of_items" fill="#1ac6ff"/>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     )
   }
