@@ -1,6 +1,6 @@
 import {Component} from "react"
 import './App.css';
-import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip} from "recharts"
+import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip} from "recharts";
 
 
 class App extends Component{
@@ -51,7 +51,6 @@ class App extends Component{
 
   render(){
     const{products,searchInput}=this.state
-    console.log(products)
     return(
       <div className="bg-container">
         <h1 className="heading">Transaction Dashboard</h1>
