@@ -4,7 +4,7 @@ import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip} from "recharts";
 
 
 class App extends Component{
-  state={products:[],barData:[],desiredMonth:"3",offsetValue:0,searchInput:""}
+  state={products:[],barData:[],stats:{},desiredMonth:"3",offsetValue:0,searchInput:""}
 
   componentDidMount(){
     this.getProductsApi()
@@ -14,6 +14,7 @@ class App extends Component{
     const {desiredMonth,offsetValue,searchInput}=this.state
     const response=await fetch(`https://vast-jade-mackerel-yoke.cyclic.app/?searchq=${searchInput}&month=${desiredMonth}&limit=10&offset=${offsetValue}`)
     const response2=await fetch(`https://vast-jade-mackerel-yoke.cyclic.app/bar-chart?month=${desiredMonth}`)
+    const response3=await fetch(`https://vast-jade-mackerel-yoke.cyclic.app/statistics?month=${desiredMonth}`)
     if(response.ok===true){
       const data=await response.json()
       this.setState({products:data})
@@ -29,6 +30,14 @@ class App extends Component{
     else{
       this.setState({products:[]})
       console.log("something went wrong")
+    }
+    if(response3.ok===true){
+      const data3=await response3.json()
+      const updatedData={
+        totalSale:data3["SUM(price)"],
+        noOfItemsSold:data3["COUNT(sold)"]
+      }
+      this.setState({stats:updatedData})
     }
   }
 
@@ -50,7 +59,8 @@ class App extends Component{
   }
 
   render(){
-    const{products,searchInput,barData}=this.state
+    const{products,searchInput,barData,stats}=this.state
+    const{totalSale,noOfItemsSold}=stats
     console.log(products)
     return(
       <div className="bg-container">
@@ -104,6 +114,11 @@ class App extends Component{
           <button type="button" onClick={this.onPreviousClick}>Previous</button>
           <button type="button" onClick={this.onNextClick}>Next</button>
         </div>
+          <div className="stat-container">
+          <h1 className="stat-heading">statistics</h1>
+            <p>Total Sale: {totalSale}</p>
+            <p>Total Sold Item: {noOfItemsSold}</p>
+          </div>
         <h1>Bar Chart</h1>
         <ResponsiveContainer width="50%" aspect={3}>
           <BarChart data={barData} width={600} height={500}>

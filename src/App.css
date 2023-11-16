@@ -104,3 +104,15 @@ th,td{
   justify-content: space-between;
 }
 
+.stat-container{
+  display: flex;
+  flex-direction: column;
+  background-color: bisque;
+  width: 350px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.stat-heading{
+  font-size: 20px;
+}
