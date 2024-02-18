@@ -103,7 +103,7 @@ class App extends Component{
                 <td>{eachItem.description}</td>
                 <td>{eachItem.price}</td>
                 <td>{eachItem.category}</td>
-                <td>{eachItem.Sold}</td>
+                <td>{eachItem.sold ? "No" : "Yes"}</td>
                 <td><img src={eachItem.image} alt="product" className="product-image"/></td>
               </tr>
              ))
